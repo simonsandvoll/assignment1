@@ -1,8 +1,17 @@
+<!-- STUDENT.PHP FILE -->
+
+<!-- INCLUDE BOOTSTRAP AND JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
 <?php
+// INCLUDE REQUIRED FILES
 include_once './classes/StudentClass.php';
 include_once './studentsInCourse.php';
 
-
+// IF SHOW IS TRUE, SHOW TABLE
 if (isset($_GET['show'])) {
 
     $studentCSVArray = studArrayFromFile('./csv/student.csv');
@@ -12,12 +21,14 @@ if (isset($_GET['show'])) {
     showStudTable($studentObjArray);
 }
 
-
+// GET STUDENTS FROM CSV FILE
 function studArrayFromFile($path) {
     $csvArr = array_map('str_getcsv', file($path));
     return $csvArr;
 }
 
+// GET ARRAY OF STUDENTS, AND MAKE THEM INTO ARRAY OF STUDENT OBJECTS
+// if sicArr is not defined get sicArr from studentsInCourse.php
 function studArrayToObj($CSVarr, $sicArr = array()) {
     if (count($sicArr) == 0) {
         $tempSicArr = array();
@@ -27,14 +38,21 @@ function studArrayToObj($CSVarr, $sicArr = array()) {
     $objArr = array();
     foreach ($CSVarr as &$stud) {
         $newStud = new Student($stud[0], $stud[1], $stud[2], $stud[3], 0, 0, 0, 0); 
+        
+        // run functions in studentClass.php to calculate the following;
+        // coursesCompleted, coursesFailed, GPA and status
         $newStud->coursesCompleted = $newStud->findCoursesCompleted($sicArr);
         $newStud->coursesFailed = $newStud->findCoursesFailed($sicArr);
         $newStud->GPA = $newStud->calculateGPA($sicArr);
         $newStud->status = $newStud->findStatus($newStud->GPA);
         
+        // Push it the student object into objArr
         array_push($objArr, $newStud);
     }
+
+    // run validate function with the student array
     $objArr = validateStudentArray($objArr);
+    // run compare function to sort array
     usort($objArr, 'GPAComparator');
     return $objArr;
 }
@@ -56,28 +74,35 @@ function validateStudentArray($array) {
     return $temp_array;
 } 
 
+// COMPARE GPA FOR EACH STUDENT, AND SORT THEM IN DECENDING ORDER
 function GPAComparator ($a, $b){
     return $a->GPA < $b->GPA;
 }
 
+// SHOW TABLE WITH ALL STUDENT DATA
 function showStudTable($studArr) {
-    echo '<table>
+    echo '<table class="table">
         <tr>
-            <th>Student Number</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Birthday (UNIX)</th>
-            <th>Course completed</th>
-            <th>Course failed</th>
-            <th>GPA</th>
-            <th>Status</th>
+            <th scope="col">Student Number</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Course completed</th>
+            <th scope="col">Course failed</th>
+            <th scope="col">GPA</th>
+            <th scope="col">Status</th>
         </tr>';
+    // run function __toString in studentClass.php
     foreach ($studArr as &$stud) {
         $stud->__toString();
     }
     echo '</table>';
 }
-
-
-
 ?>
+<!-- go to course.php or back to index.php -->
+<body>
+    <div class="container-fluid">
+        <a href="course.php?show=true"  class="btn btn-primary">Show courses</a>  
+        <a href="index.php"   class="btn btn-primary">Back</a>
+    </div>
+</body>

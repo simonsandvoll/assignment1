@@ -11,12 +11,14 @@ class Student {
         $this->status = $status;
     }
 
+    // ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF STUDENT OBJECTS. 
+    // convert birtday from unix into normal date format (only for display purposes)
     public function __toString(){
         echo '<tr>
             <td>' . $this->studentNo . '</td>
             <td>' . $this->firstName . '</td>
             <td>' . $this->lastName . '</td>
-            <td>' . $this->birthdate . '</td>
+            <td>' . $this->convertUnix($this->birthdate) . '</td>
             <td>' . $this->coursesCompleted . '</td>
             <td>' . $this->coursesFailed . '</td>
             <td>' . $this->GPA . '</td>
@@ -24,34 +26,39 @@ class Student {
         </tr>';
     }
 
+    // CONVERTS STORED UNIX TIMESTAMP INTO A READABLE DATE
+    function convertUnix ($unix) {
+        return gmdate("Y-m-d", $unix);  
+    }
+
+    // GET NUMBER OF COURSES COMPLETED -> $arr is student-in-course-array -> from data.php
     function findCoursesCompleted($arr) {
-        // get the number of courses completed from student in course array
         $tempArr = array();
         foreach ($arr as &$stud) {
             if ($stud->grade != 'F' && $stud->studentNo == $this->studentNo) {
+                $stud->grade = strtoupper($stud->grade);
                 array_push($tempArr, $stud);
             }
         }
         return count($tempArr);
     }
 
+    // GET NUMBER OF COURSES FAILED -> $arr is student-in-course-array -> from data.php
     function findCoursesFailed($arr) {
-        // get the number of courses failed from student in course array. 
         $tempArr = array();
         foreach ($arr as &$stud) {
             if ($stud->grade == 'F' && $stud->studentNo == $this->studentNo) {
+                $stud->grade = strtoupper($stud->grade);
                 array_push($tempArr, $stud);
             }
         }
         return count($tempArr);
     }
-
+    
+    // CALCULATE GPA FOR STUDENT -> $arr is student-in-course-array -> from data.php
     function calculateGPA($arr) {
-        // get gpa
         $tempCredit = 0;
-        
         $pointPerCourse = array();
-
         $point = 0;
         $mulCredit = 0;
         $gradeCredit = 0;
@@ -60,14 +67,18 @@ class Student {
 
         $grades = ["F", "E", "D", "C", "B", "A"];
         
+        // GET ACCUMULATED CREDIT OF STUDENT
         foreach ($arr as &$course) {
             if ($course->studentNo == $this->studentNo) {
                 $mulCredit += $course->credit;
             }
         }
 
+        // FIND SUM COURSE_CREDIT MULTIPLIED WITH GRADE
         foreach ($arr as &$stud) {
             if ($stud->studentNo == $this->studentNo) {
+                $stud->grade = strtoupper($stud->grade);
+                // FIND POINT BY GETTING KEY FROM GRADES ARRAY
                 $point = array_search($stud->grade, $grades);
                 $tempCredit = $stud->credit;
                 $gradeCredit = $point*$tempCredit;
@@ -75,15 +86,15 @@ class Student {
             }
         }
         $gradeCreditSum = array_sum($pointPerCourse);
+        // CALCULATE sum(course_credit x grade) / sum(credits_taken).
         $result = $gradeCreditSum / $mulCredit;
-
         $result = round($result, 2);
-
+        // RETURN GPA
         return $result;
     }
     
+    // FIND STATUS BASED ON GPA
     function findStatus($gpa) {
-        // find status from GPA
         $status = '';
         switch ($gpa) {
             case ($gpa>=0 && $gpa<=1.9):

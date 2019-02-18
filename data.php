@@ -1,9 +1,10 @@
 <?php
-
+// include required files
 include_once './student.php';
 include_once './course.php';
 include_once './studentsInCourse.php';
 
+// when file is submitted check the file
 if ( isset($_POST['submit']) ) {
     if ( isset($_FILES["file"]) ) {
         //if there was an error uploading the file
@@ -20,13 +21,12 @@ if ( isset($_POST['submit']) ) {
                 while( ($row = fgetcsv($fh)) !== FALSE ) {
                     $importArray[] = $row;
                 }
-                /* echo '<pre>'; print_r($importArray); echo '</pre>'; */
                 
                 $sicArr = splitArray($importArray, 'sic');
-                
                 $studArr = splitArray($importArray, 'stud');
                 $courseArr = splitArray($importArray, 'course');
 
+                // add credit from coursearr to sicarray
                 foreach ($studArr as &$item) {
                     foreach($sicArr as &$stud) {
                         if ($item[0] == $stud[0]) {
@@ -39,14 +39,12 @@ if ( isset($_POST['submit']) ) {
                     }
                 }
 
+                // runs functions in their respected php files -> sicArr to studentIncourse.php. ->studArr to student.php. ->courseArr to course.php
                 $sicArr = sicArrayToObj(removeDuplicates($sicArr));
                 $studArr = studArrayToObj(removeDuplicates($studArr), $sicArr);
                 $courseArr = courseArrayToObj(removeDuplicates($courseArr), $sicArr);
                 
-               /*  echo '<pre>'; print_r($sicArr); echo '</pre>';
-                echo '<pre>'; print_r($studArr); echo '</pre>';
-                echo '<pre>'; print_r($courseArr); echo '</pre>'; */
-               
+               // write array of objects to csv file. 
                 writeToFile($sicArr, './csv/studentInCourse.csv');
                 writeToFile($studArr, './csv/student.csv');
                 writeToFile($courseArr, './csv/course.csv');
@@ -58,6 +56,7 @@ if ( isset($_POST['submit']) ) {
     }
 }
 
+// SPLIT IMPORTED ARRAY INTO IT'S RESPECTED ARRAYS: STUDENTARRAY, COURSEARRAY AND STUDENTINCOURSEARRAY
 function splitArray($arr, $value) {
     if ($value == 'stud') {
         $studArr = array();
@@ -82,7 +81,7 @@ function splitArray($arr, $value) {
     }
 }
 
-/* _____________________________________ REMOVE DUPLICATES _____________________________________ */
+
 
 // FINDS AND REMOVES DUPLICATES FORM ARRAY.
 function removeDuplicates($arr) {
@@ -91,7 +90,7 @@ function removeDuplicates($arr) {
     return $arr;
 }
 
-/* _____________________________________ WRITE ARRAY OF OBJECTS TO CSV _____________________________________ */
+
 // GETS ARRAY OF OBJECTS AND THE PATH TO THE FILE THAT IS BEING OVERWRITTEN AND WRITES A LINE FOR
 // EACH OBJECT. 
 function writeToFile($arr, $path) {

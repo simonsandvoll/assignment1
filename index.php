@@ -12,45 +12,48 @@
 </head>
 
 <body>
-    <div id="wrap">
-        <div class="container">
-            <div class="row">
+        <div class="container-fluid">
                 <legend>School</legend>
-                <form class="form-horizontal" action="data.php" method="post" enctype="multipart/form-data" id="csvForm">
+                <form action="data.php" method="post" enctype="multipart/form-data" id="csvForm">
                     <fieldset>
+                        
+                        <!-- buttons to student and course page -->
                         <a href="student.php?show=true"  class="btn btn-primary">Show students</a>
                         <a href="course.php?show=true"   class="btn btn-primary">Show courses</a>
+                        
                         <!-- Form Name -->
                         <h4>Upload csv file</h4>
                         <hr>
  
                         <!-- File Button -->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="filebutton">Select File</label>
-                            <div class="col-md-4">
+                            <label for="filebutton">Select File</label>
+                            <div>
                                 <input type="file" accept=".csv" name="file" id="file" class="input-large">
                             </div>
                         </div>
 
                         <!-- Button -->
                         <div class="form-group">
-                            <label class="col-md-4 control-label" for="submit">Upload data</label>
-                            <div class="col-md-4">
+                            <label  for="submit">Upload csv</label>
+                            <div>
                                 <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary button-loading" data-loading-text="Loading...">Upload</button>
                             </div>
                         </div>
                     </fieldset>
                 </form>
             </div>
-        </div>
-    </div>
 
 </body>
 </html>
 
 <?php
-if ($_GET['upload'] == true) {
-    echo 'Upload successful!';
+// CHECK IF FILE IS UPLOADED, if true echo it. 
+if (isset($_GET['upload'])) {
+    if ($_GET['upload'] == true) {
+        echo 'Upload successful!';
+    }
 }
+
 
 ?>

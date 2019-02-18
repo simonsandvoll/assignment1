@@ -14,6 +14,7 @@ class Course {
         $this->averageGrade = $averageGrade;
     }
 
+    // ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF COURSE OBJECTS. 
     public function __toString(){
         echo '<tr>
             <td>' . $this->courseCode . '</td>
@@ -29,8 +30,8 @@ class Course {
         </tr>';
     }
     
+    // GET NUMBER OF STUDENTS IN COURSE -> $arr is student-in-course-array -> from data.php
     function findNumStudents($arr) {
-        // find number of students registered for course
         $tempArr = array();
         $count = 0;
         foreach ($arr as &$course) {
@@ -41,12 +42,14 @@ class Course {
         return $count;
     }
 
+    // GET NUMBER OF STUDENT THAT HAS PASSED THE COURSE -> $arr is student-in-course-array -> from data.php
     function findNumStudentsPassed($arr) {
         // find number of students that passed the course
         $tempArr = array();
         $studentCount = 0;
         foreach ($arr as &$stud) {
             if ($stud->grade != 'F' && $stud->courseCode == $this->courseCode) {
+                $stud->grade = strtoupper($stud->grade);
                 array_push($tempArr, $stud);
             }
         }
@@ -54,18 +57,21 @@ class Course {
         return $studentCount;
     }
 
+    // GET NUMBER OF STUDENT THAT HAS FAILED THE COURSE -> $arr is student-in-course-array -> from data.php
     function findNumStudentsFailed($arr) {
         // find number of students that failed the course
         $tempArr = array();
         foreach ($arr as &$stud) {
             if ($stud->grade == 'F' && $stud->courseCode == $this->courseCode) {
+                $stud->grade = strtoupper($stud->grade);
                 array_push($tempArr, $stud);
             }
         }
         return count($tempArr);
     }
+
+    // GET GRADE AVERAGE OF STUDENTS IN COURSE -> $arr is student-in-course-array -> from data.php
     function findAverageGrade($arr) {
-        // find grade average
         $grades = ["F", "E", "D", "C", "B", "A"];
         $gradeTemp = array();
         $tempSum = 0;
@@ -73,6 +79,8 @@ class Course {
         $avgGrade = '';
         foreach ($arr as &$stud) {
             if ($stud->courseCode == $this->courseCode) {
+                $stud->grade = strtoupper($stud->grade);
+                // FIND POINT BY GETTING KEY FROM GRADES ARRAY
                 $point = array_search($stud->grade, $grades);
                 array_push($gradeTemp, $point);
             }

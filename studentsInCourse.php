@@ -1,11 +1,14 @@
 <?php
+// INCLUDE REQUIRED FILES
 include_once './classes/StudentInCourseClass.php';
 
+// GET STUDENTS-IN-COURSE FROM CSV FILE
 function sicArrayFromFile($path) {
     $csvArr = array_map('str_getcsv', file($path));
     return $csvArr;
 }
 
+// GET ARRAY OF STUDENT-IN-COURSE, AND MAKE THEM INTO ARRAY OF STUDENT-IN-COURSE OBJECTS
 function sicArrayToObj($CSVarr) {
     $objArr = array();
     foreach ($CSVarr as &$siC) {
