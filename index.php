@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <title>School</title>
 </head>
+
 <body>
     <div id="wrap">
         <div class="container">
             <div class="row">
                 <legend>School</legend>
-                <form class="form-horizontal" action="data.php" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="data.php" method="post" enctype="multipart/form-data" id="csvForm">
                     <fieldset>
                         <a href="student.php?show=true"  class="btn btn-primary">Show students</a>
                         <a href="course.php?show=true"   class="btn btn-primary">Show courses</a>
@@ -42,6 +44,13 @@
             </div>
         </div>
     </div>
-</body>
+
 </body>
 </html>
+
+<?php
+if ($_GET['upload'] == true) {
+    echo 'Upload successful!';
+}
+
+?>
