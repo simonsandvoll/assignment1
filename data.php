@@ -10,6 +10,7 @@ if ( isset($_POST['submit']) ) {
         //if there was an error uploading the file
         if ($_FILES["file"]["error"] > 0) {
              echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+             header('Location: index.php?upload=false');
         } else {
             echo 'file uploaded ';
 
@@ -49,10 +50,13 @@ if ( isset($_POST['submit']) ) {
                 writeToFile($studArr, './csv/student.csv');
                 writeToFile($courseArr, './csv/course.csv');
                 
+                // redirect back to index.php
+                header('Location: index.php?upload=true');   
             }
         }
     } else {
             echo "No file selected <br />";
+            header('Location: index.php?upload=false');
     }
 }
 
@@ -100,9 +104,6 @@ function writeToFile($arr, $path) {
     }
     fclose($csv_file);
 }
-
-// redirect back to index.php
-header('Location: index.php?upload=true');
 
 
 ?>

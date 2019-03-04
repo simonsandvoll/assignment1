@@ -52,6 +52,8 @@
 if (isset($_GET['upload'])) {
     if ($_GET['upload'] == true) {
         echo 'Upload successful!';
+    } else {
+        echo 'Upload unsuccessful!';
     }
 }
 
