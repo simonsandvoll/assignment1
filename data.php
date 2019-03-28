@@ -25,6 +25,7 @@ if ( isset($_POST['submit']) ) {
                 
                 $sicArr = splitArray($importArray, 'sic');
                 $studArr = splitArray($importArray, 'stud');
+                echo '<pre>'; print_r($studArr); echo '</pre>';
                 $courseArr = splitArray($importArray, 'course');
 
                 // add credit from coursearr to sicarray
@@ -39,19 +40,22 @@ if ( isset($_POST['submit']) ) {
                         }
                     }
                 }
-
+                
                 // runs functions in their respected php files -> sicArr to studentIncourse.php. ->studArr to student.php. ->courseArr to course.php
                 $sicArr = sicArrayToObj(removeDuplicates($sicArr));
                 $studArr = studArrayToObj(removeDuplicates($studArr), $sicArr);
                 $courseArr = courseArrayToObj(removeDuplicates($courseArr), $sicArr);
                 
+                
+                
+
                // write array of objects to csv file. 
                 writeToFile($sicArr, './csv/studentInCourse.csv');
                 writeToFile($studArr, './csv/student.csv');
                 writeToFile($courseArr, './csv/course.csv');
                 
                 // redirect back to index.php
-                header('Location: index.php?upload=true');   
+                //header('Location: index.php?upload=true');   
             }
         }
     } else {
@@ -64,6 +68,12 @@ if ( isset($_POST['submit']) ) {
 function splitArray($arr, $value) {
     if ($value == 'stud') {
         $studArr = array();
+        $studCsv = studArrayFromFile('./csv/student.csv');
+        if (count($studCsv) != 0) {
+            foreach($studCsv as &$cStud) {
+                array_push($studArr, $cStud);
+            }
+        }
         foreach($arr as &$stud) {
             array_push($studArr, array($stud[0], $stud[1], $stud[2], $stud[3]));
         }
@@ -71,6 +81,12 @@ function splitArray($arr, $value) {
     }
     if ($value == 'course') {
         $courseArr = array();
+        $courseCsv = courseArrayFromFile('./csv/course.csv');
+        if (count($courseCsv) != 0) {
+            foreach($courseCsv as &$cCourse) {
+                array_push($courseArr, $cCourse);
+            }
+        }
         foreach($arr as &$course) {
             array_push($courseArr, array($course[4], $course[5], $course[6], $course[7], $course[8], $course[9]));
         }
@@ -78,9 +94,15 @@ function splitArray($arr, $value) {
     }
     if ($value == 'sic') {
         $sicArr = array();
+        $sicCsv = sicArrayFromFile('./csv/studentInCourse.csv');
+        if (count($sicCsv) != 0) {
+            foreach($sicCsv as &$cSic) {
+                array_push($sicArr, $cSic);
+            }
+        }
         foreach($arr as &$sic) {
             array_push($sicArr, array($sic[0], $sic[4], $sic[6], $sic[7], $sic[10]));
-        }// $studentNo, $courseCode, $year, $semester, $grade
+        }
         return $sicArr;
     }
 }
