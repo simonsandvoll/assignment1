@@ -14,7 +14,9 @@ class Course {
         $this->averageGrade = $averageGrade;
     }
 
-    // ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF COURSE OBJECTS. 
+    /**
+     * ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF COURSE OBJECTS. 
+    */
     public function __toString(){
         echo '<tr>
             <td>' . $this->courseCode . '</td>
@@ -30,7 +32,11 @@ class Course {
         </tr>';
     }
     
-    // GET NUMBER OF STUDENTS IN COURSE -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET NUMBER OF STUDENTS IN COURSE
+     * @param { array } $arr is array of student-in-course, meaning array with info about all students who took courses with grade and credits. From data.php
+     * @return { int } $count -> number of students part of course. 
+    */
     function findNumStudents($arr) {
         $tempArr = array();
         $count = 0;
@@ -42,9 +48,12 @@ class Course {
         return $count;
     }
 
-    // GET NUMBER OF STUDENT THAT HAS PASSED THE COURSE -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET NUMBER OF STUDENT THAT HAS PASSED THE COURSE
+     * @param { array } $arr is array of student-in-course. From data.php
+     * @return { int } $studentCount -> number of students passed that specific course (students with grade != F)
+    */
     function findNumStudentsPassed($arr) {
-        // find number of students that passed the course
         $tempArr = array();
         $studentCount = 0;
         foreach ($arr as &$stud) {
@@ -56,10 +65,13 @@ class Course {
         $studentCount = count($tempArr);
         return $studentCount;
     }
-
-    // GET NUMBER OF STUDENT THAT HAS FAILED THE COURSE -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET NUMBER OF STUDENT THAT HAS FAILED THE COURSE
+     * @param { array } $arr is array of student-in-course. From data.php
+     * @return { int } $studentCount -> number of students failed that specific course (students with grade = F)
+    */
     function findNumStudentsFailed($arr) {
-        // find number of students that failed the course
+
         $tempArr = array();
         foreach ($arr as &$stud) {
             if ($stud->grade == 'F' && $stud->courseCode == $this->courseCode) {
@@ -70,7 +82,11 @@ class Course {
         return count($tempArr);
     }
 
-    // GET GRADE AVERAGE OF STUDENTS IN COURSE -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET GRADE AVERAGE OF STUDENTS IN COURSE
+     * @param { array } $arr is student-in-course-array. From data.php
+     * @return { string } $avgGrade -> the average grade for the course
+    */
     function findAverageGrade($arr) {
         $grades = ["F", "E", "D", "C", "B", "A"];
         $gradeTemp = array();

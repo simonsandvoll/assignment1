@@ -21,14 +21,23 @@ if (isset($_GET['show'])) {
     showCourseTable($courseObjArray);
 }
 
-// GET COURSES FROM CSV FILE
+/**
+ * GET COURSES FROM CSV FILE
+ * @param { string } $path is the path for the selected CSV file.
+ * @return { array } $csvArr -> array created from the CSV file. 
+*/ 
 function courseArrayFromFile($path) {
     $csvArr = array_map('str_getcsv', file($path));
     return $csvArr;
 }
 
-// GET ARRAY OF COURSES, AND MAKE THEM INTO ARRAY OF COURSE OBJECTS
-// if sicArr is not defined get sicArr from studentsInCourse.php
+/**
+ * GET ARRAY OF COURSES, AND MAKE THEM INTO ARRAY OF COURSE OBJECTS
+ * if sicArr is not defined get sicArr from studentsInCourse.php
+ * @param { array } $CSVarr -> array of courses.
+ * @param { array } $sicArr -> array of students part of course.
+ * @return { array of objects } $objArr -> array of course objects. 
+*/ 
 function courseArrayToObj($CSVarr, $sicArr = array()) {
     if (count($sicArr) == 0) {
         $tempSicArr = array();
@@ -57,8 +66,11 @@ function courseArrayToObj($CSVarr, $sicArr = array()) {
     return $objArr;
 }
 
-// VALIDATE COURSE ARRAY -> SEE IF THERE IS ANOTHER COURSE WITH THE SAME courseCode
-// AND REMOVE THAT OBJECT. 
+/**
+ * VALIDATE COURSE ARRAY -> SEE IF THERE IS ANOTHER COURSE WITH THE SAME courseCode AND REMOVE THAT OBJECT. 
+ * @param { array } array to validate
+ * @return { array } array with removed duplicates
+*/
 function validateCourseArray($array) {
     $temp_array = array();
     $i = 0;
@@ -74,12 +86,20 @@ function validateCourseArray($array) {
     return $temp_array;
 }
 
-// SORTING COURSES BASED ON STUDENTS REGISTERED FOR COURSE IN ACENDING ORDER
+/**
+ * SORTING COURSES BASED ON STUDENTS REGISTERED FOR COURSE IN ACENDING ORDER
+ * @param { object } $object1 -> one course object from the array of course objects to reposition based on the other object
+ * @param { object } $object2 -> object to check against
+ * @return { bool } does first object need to be moved (true or false);
+*/
 function enrolledComparator($object1, $object2) { 
     return $object1->numStudents > $object2->numStudents; 
 } 
 
-// SHOW TALBE WITH ALL COURSE DATA
+/**
+ * SHOW TALBE WITH ALL COURSE DATA
+ * @param { array of objects } array of course objects
+*/
 function showCourseTable($courseArr) {
     echo '<table class="table">
     <tr>

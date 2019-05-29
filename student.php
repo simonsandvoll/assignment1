@@ -21,14 +21,23 @@ if (isset($_GET['show'])) {
     showStudTable($studentObjArray);
 }
 
-// GET STUDENTS FROM CSV FILE
+/**
+ * GET STUDENTS FROM CSV FILE
+ * @param { string } $path -> path of the file to get array from
+ * @return { array } $csvArr -> array of students
+*/
 function studArrayFromFile($path) {
     $csvArr = array_map('str_getcsv', file($path));
     return $csvArr;
 }
 
-// GET ARRAY OF STUDENTS, AND MAKE THEM INTO ARRAY OF STUDENT OBJECTS
-// if sicArr is not defined get sicArr from studentsInCourse.php
+/**
+ * GET ARRAY OF STUDENTS, AND MAKE THEM INTO ARRAY OF STUDENT OBJECTS
+ * if sicArr is not defined get sicArr from studentsInCourse.php
+ * @param { array } $CSVarr -> array of students.
+ * @param { array } $sicArr -> array of students part of course.
+ * @return { array of objects } $objArr -> array of student objects. 
+*/
 function studArrayToObj($CSVarr, $sicArr = array()) {
     if (count($sicArr) == 0) {
         $tempSicArr = array();
@@ -57,8 +66,13 @@ function studArrayToObj($CSVarr, $sicArr = array()) {
     return $objArr;
 }
 
-// VALIDATE STUDENT ARRAY -> SEE IF THERE IS ANOTHER STUDENT WITH THE SAME STUDENTNO
-// AND REMOVE THAT OBJECT. 
+/**
+ * VALIDATE STUDENT ARRAY 
+ * SEE IF THERE IS ANOTHER STUDENT WITH THE SAME STUDENTNO AND REMOVE THAT OBJECT. 
+ * if sicArr is not defined get sicArr from studentsInCourse.php
+ * @param { array } $array -> array of students to be validated.
+ * @return { array } $temp_array -> cleaned array. 
+*/
 function validateStudentArray($array) {
     $temp_array = array();
     $i = 0;
@@ -74,12 +88,21 @@ function validateStudentArray($array) {
     return $temp_array;
 } 
 
-// COMPARE GPA FOR EACH STUDENT, AND SORT THEM IN DECENDING ORDER
+/**
+ * COMPARE GPA FOR EACH STUDENT, AND SORT THEM IN DECENDING ORDER
+ * if sicArr is not defined get sicArr from studentsInCourse.php
+ * @param { object } $a -> one course object from the array of course objects to reposition based on the other object
+ * @param { object } $b -> object to check against
+ * @return { bool } if first object is going to be moved or not (true or false)
+*/
 function GPAComparator ($a, $b){
     return $a->GPA < $b->GPA;
 }
 
-// SHOW TABLE WITH ALL STUDENT DATA
+/**
+ * SHOW TABLE WITH ALL STUDENT DATA THROUGH ECHOs
+ * @param { array of objects } $studArr -> array of student objects.
+*/
 function showStudTable($studArr) {
     echo '<table class="table">
         <tr>

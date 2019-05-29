@@ -11,8 +11,11 @@ class Student {
         $this->status = $status;
     }
 
-    // ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF STUDENT OBJECTS. 
-    // convert birtday from unix into normal date format (only for display purposes)
+
+    /**
+     * ECHO TABLE ROWS FOR EACH OBJECT IN ARRAY OF STUDENT OBJECTS. 
+     * Also convert birtday from unix into normal date format (for display purposes)
+    */
     public function __toString(){
         echo '<tr>
             <td>' . $this->studentNo . '</td>
@@ -26,12 +29,19 @@ class Student {
         </tr>';
     }
 
-    // CONVERTS STORED UNIX TIMESTAMP INTO A READABLE DATE
+    
+    /**
+     * CONVERTS STORED UNIX TIMESTAMP INTO A READABLE DATE
+     * @return { date string } returned date as Greenwich Mean Time (GMT).
+    */
     function convertUnix ($unix) {
         return gmdate("Y-m-d", $unix);  
     }
-
-    // GET NUMBER OF COURSES COMPLETED -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET NUMBER OF COURSES COMPLETED FOR STUDENT
+     * @param { array } $arr is array of student-in-course, meaning array with info about all students who took courses with grade and credits. From data.php
+     * @return { int } count of the number of course completed (where grade != F) for one student. 
+    */
     function findCoursesCompleted($arr) {
         $tempArr = array();
         foreach ($arr as &$stud) {
@@ -43,7 +53,11 @@ class Student {
         return count($tempArr);
     }
 
-    // GET NUMBER OF COURSES FAILED -> $arr is student-in-course-array -> from data.php
+    /**
+     * GET NUMBER OF COURSES FAILED BY STUDENT
+     * @param { array } $arr is array of student-in-course. From data.php
+     * @return { int } count of the number of course failed (where grade == F) for one student. 
+    */
     function findCoursesFailed($arr) {
         $tempArr = array();
         foreach ($arr as &$stud) {
@@ -55,7 +69,11 @@ class Student {
         return count($tempArr);
     }
     
-    // CALCULATE GPA FOR STUDENT -> $arr is student-in-course-array -> from data.php
+    /**
+     * CALCULATE GPA FOR STUDENT FOR STUDENT
+     * @param { array } $arr is array of student-in-course. From data.php
+     * @return { float } $result -> result of the GPA calculation: sum(course_credit x grade) / sum(credits_taken). 
+    */    
     function calculateGPA($arr) {
         $tempCredit = 0;
         $pointPerCourse = array();
@@ -92,8 +110,11 @@ class Student {
         // RETURN GPA
         return $result;
     }
-    
-    // FIND STATUS BASED ON GPA
+    /**
+     * FIND STATUS BASED ON GPA FOR STUDENT
+     * @param { float } $gpa is the gpa calculated from the calculateGPA function.
+     * @return { string } $status -> string with the student status -> if high GPA status = 'High Honour'. 
+    */ 
     function findStatus($gpa) {
         $status = '';
         switch ($gpa) {

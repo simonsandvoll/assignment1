@@ -43,9 +43,6 @@ if ( isset($_POST['submit']) ) {
                 $sicArr = sicArrayToObj(removeDuplicates($sicArr));
                 $studArr = studArrayToObj(removeDuplicates($studArr), $sicArr);
                 $courseArr = courseArrayToObj(removeDuplicates($courseArr), $sicArr);
-                
-                
-                
 
                // write array of objects to csv file. 
                 writeToFile($sicArr, './csv/studentInCourse.csv');
@@ -62,7 +59,12 @@ if ( isset($_POST['submit']) ) {
     }
 }
 
-// SPLIT IMPORTED ARRAY INTO IT'S RESPECTED ARRAYS: STUDENTARRAY, COURSEARRAY AND STUDENTINCOURSEARRAY
+/**
+ * SPLIT IMPORTED ARRAY INTO IT'S RESPECTED ARRAYS: STUDENTARRAY, COURSEARRAY AND STUDENTINCOURSEARRAY
+ * @param { array } $arr -> array to split
+ * @param { string } $value -> what type of array it is; student, course, or student-in-course
+ * @return { array } $--Arr -> dependant on what the value is. Returns array with only the selected values.
+*/
 function splitArray($arr, $value) {
     if ($value == 'stud') {
         $studArr = array();
@@ -105,18 +107,23 @@ function splitArray($arr, $value) {
     }
 }
 
-
-
-// FINDS AND REMOVES DUPLICATES FORM ARRAY.
+/**
+ * FINDS AND REMOVES DUPLICATES FORM ARRAY.
+ * @param { array } $arr -> array to clean
+ * @return { array } $arr -> with removed duplicates
+*/
 function removeDuplicates($arr) {
     $arr = array_map("unserialize", array_unique(array_map("serialize",  $arr)));
     $arr = array_values($arr);
     return $arr;
 }
 
-
-// GETS ARRAY OF OBJECTS AND THE PATH TO THE FILE THAT IS BEING OVERWRITTEN AND WRITES A LINE FOR
-// EACH OBJECT. 
+/**
+ * GETS ARRAY OF OBJECTS AND THE PATH TO THE FILE THAT IS 
+ * BEING OVERWRITTEN AND WRITES A LINE FOR EACH OBJECT. 
+ * @param { array } $arr -> array to write into a file
+ * @return { string } $path -> path of the file 
+*/
 function writeToFile($arr, $path) {
     $csv_file = fopen($path, 'w');
     foreach ($arr as &$fields) {
@@ -124,6 +131,4 @@ function writeToFile($arr, $path) {
     }
     fclose($csv_file);
 }
-
-
 ?>
