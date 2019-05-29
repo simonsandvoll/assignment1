@@ -4,7 +4,8 @@ This assignment is a php assignment, and it creates a database with CSV files.
 ## How to launch this assignment
 1. Place the folder inside the HTDOCS folder of your XAMPP application 
 2. Then start XAMPP and open the Index.php file.
-3. Here you can upload a CSV file and show the already registered students and courses.
+
+Here you can upload a CSV file and show the already registered students and courses.
 
 ### Uploading CSV file
 When uploading a file to the database, one must follow the right order.

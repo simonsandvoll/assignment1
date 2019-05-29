@@ -15,7 +15,6 @@ if ( isset($_POST['submit']) ) {
             echo 'file uploaded ';
 
             $fileName = $_FILES["file"]["name"];
-            echo $fileName;
             if ($_FILES["file"]["size"] > 0) {
                 $fh = fopen($_FILES['file']['tmp_name'], 'r+');
                 $importArray = array();
@@ -25,7 +24,6 @@ if ( isset($_POST['submit']) ) {
                 
                 $sicArr = splitArray($importArray, 'sic');
                 $studArr = splitArray($importArray, 'stud');
-                echo '<pre>'; print_r($studArr); echo '</pre>';
                 $courseArr = splitArray($importArray, 'course');
 
                 // add credit from coursearr to sicarray
@@ -55,7 +53,7 @@ if ( isset($_POST['submit']) ) {
                 writeToFile($courseArr, './csv/course.csv');
                 
                 // redirect back to index.php
-                //header('Location: index.php?upload=true');   
+                header('Location: index.php?upload=true');   
             }
         }
     } else {
