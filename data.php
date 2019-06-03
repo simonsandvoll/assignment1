@@ -21,23 +21,9 @@ if ( isset($_POST['submit']) ) {
                 while( ($row = fgetcsv($fh)) !== FALSE ) {
                     $importArray[] = $row;
                 }
-                
                 $sicArr = splitArray($importArray, 'sic');
                 $studArr = splitArray($importArray, 'stud');
                 $courseArr = splitArray($importArray, 'course');
-
-                // add credit from coursearr to sicarray
-                foreach ($studArr as &$item) {
-                    foreach($sicArr as &$stud) {
-                        if ($item[0] == $stud[0]) {
-                            foreach($courseArr as &$course) {
-                                if ($stud[1] == $course[0]) {
-                                    $stud[5] = $course[5];
-                                }
-                            }
-                        }
-                    }
-                }
                 
                 // runs functions in their respected php files -> sicArr to studentIncourse.php. ->studArr to student.php. ->courseArr to course.php
                 $sicArr = sicArrayToObj(removeDuplicates($sicArr));
@@ -101,7 +87,7 @@ function splitArray($arr, $value) {
             }
         }
         foreach($arr as &$sic) {
-            array_push($sicArr, array($sic[0], $sic[4], $sic[6], $sic[7], $sic[10]));
+            array_push($sicArr, array($sic[0], $sic[4], $sic[6], $sic[7], $sic[10], $sic[9]));
         }
         return $sicArr;
     }

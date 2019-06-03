@@ -15,7 +15,7 @@ include_once './studentsInCourse.php';
 if (isset($_GET['show'])) {
 
     $studentCSVArray = studArrayFromFile('./csv/student.csv');
-
+    $obj = 
     $studentObjArray = studArrayToObj($studentCSVArray);
 
     showStudTable($studentObjArray);
